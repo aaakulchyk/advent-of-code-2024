@@ -70,7 +70,28 @@ pub fn main() !void {
         distance += @abs(first - second);
     }
 
-    std.debug.print("Answer: {d}.\n", .{distance});
+    std.debug.print("Answer to part 1: {d}.\n", .{distance});
+
+    var value_counts = std.AutoHashMap(i32, u32).init(allocator);
+    defer value_counts.deinit();
+
+    for (first_column.items) |value| {
+        try value_counts.put(value, 0);
+    }
+    for (second_column.items) |value| {
+        if (!value_counts.contains(value)) continue;
+        const count = value_counts.get(value) orelse 0;
+        try value_counts.put(value, count + 1);
+    }
+
+    var weighted_distance: u64 = 0;
+    var it = value_counts.iterator();
+    while (it.next()) |entry| {
+        const u_key: u32 = @intCast(entry.key_ptr.*);
+        weighted_distance += u_key * entry.value_ptr.*;
+    }
+
+    std.debug.print("Answer to part 2: {d}.\n", .{weighted_distance});
 }
 
 fn parse_line(line: String) !NumberPair {
