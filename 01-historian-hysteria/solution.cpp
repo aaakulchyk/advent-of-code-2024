@@ -4,6 +4,7 @@
 #include <sstream>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 #include <utility>
 #include <vector>
 
@@ -35,5 +36,21 @@ auto main() -> int {
         difference += std::abs(first_column[i] - second_column[i]);
     }
     std::cout << "Answer to part 1: " << difference << ".\n";
+
+    std::unordered_map<int, unsigned int> value_counts;
+    for (int value : first_column) {
+        if (value_counts.contains(value)) continue;
+        value_counts.insert({ value, 0 });
+    }
+    for (int value : second_column) {
+        auto entry = value_counts.find(value);
+        if (entry == value_counts.end()) continue;
+        entry->second++;
+    }
+    size_t weighted_difference = 0;
+    for (const auto& [value, count] : value_counts) {
+        weighted_difference += static_cast<unsigned int>(value) * count;
+    }
+    std::cout << "Answer to part 2: " << weighted_difference << ".\n";
     return 0;
 }
