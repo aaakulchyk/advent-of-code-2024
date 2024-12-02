@@ -9,7 +9,7 @@ Hopefully, I will go through the first 5-10 days at least.
 
 ## Run Commands
 
-Navigate to a folder corresponding a particular day of the Advent and execute one of the following commands depending on the desired source language.
+Navigate to a folder corresponding to a particular day of the Advent and execute one of the following commands depending on the desired source language.
 
 ### Zig
 
@@ -21,5 +21,5 @@ zig run solution.zig
 
 ```
 g++ -std=c++20 solution.cpp -o solution
-solution
+./solution
 ```
