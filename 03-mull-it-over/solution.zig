@@ -47,13 +47,11 @@ fn match_mul_sum(line: String) !usize {
             continue;
         }
         const x_begin: usize = i + 4;
-        var x_end: usize = x_begin;
-        while (x_end < line.len and std.ascii.isDigit(line[x_end])) : (x_end += 1) {}
+        const x_end = match_mul_operand(line, x_begin);
         i = x_end;
         if (x_end - x_begin > 3 or line[i] != ',') continue;
         const y_begin: usize = i + 1;
-        var y_end: usize = y_begin;
-        while (y_end < line.len and std.ascii.isDigit(line[y_end])) : (y_end += 1) {}
+        const y_end = match_mul_operand(line, y_begin);
         i = y_end;
         if (y_end - y_begin > 3 or line[i] != ')') continue;
         res += try std.fmt.parseInt(u32, line[x_begin..x_end], 10) * try std.fmt.parseInt(u32, line[y_begin..y_end], 10);
@@ -61,7 +59,11 @@ fn match_mul_sum(line: String) !usize {
     return res;
 }
 
-// fn match_mul_operand(line: String, begin: usize) !u32 {}
+fn match_mul_operand(line: String, begin: usize) usize {
+    var end = begin;
+    while (end < line.len and std.ascii.isDigit(line[end])) : (end += 1) {}
+    return end;
+}
 
 fn read_file(allocator: std.mem.Allocator, path: String) ![]u8 {
     return std.fs.cwd().readFileAlloc(allocator, path, MAX_FILE_SIZE_B);
